@@ -11,6 +11,6 @@ function checkIfDouble(string, onChangeText){
 
 export default function Inputfield(props) {
   return (
-      <TextInput keyboardType='numeric' returnKeyType="Done" style={{alignSelf: 'center', margin: 5, width: 300}} label={`${props.name}`} onChangeText={text => checkIfDouble(text, props.onChangeText)}/>
+      <TextInput keyboardType='numeric' returnKeyType="done" style={{alignSelf: 'center', margin: 5, width: 300}} label={`${props.name}`} onChangeText={text => checkIfDouble(text, props.onChangeText)}/>
   );
 }
