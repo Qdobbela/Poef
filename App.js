@@ -14,21 +14,29 @@ export default function App() {
     if(isNaN(index)){
       return 0
     }
-    return ((index/1.92)*50).toFixed(0)
+    result = ((50 - (index/1.92)*50)*2).toFixed(0)
+    if(result == -0){
+      return 0;
+    } else {
+      return result;
+    }
   }
 
   function perc2color(perc) {
     var r, g, b = 0;
-    if (perc < 50) {
+    if (perc > 0) {
       g = 255;
-      r = Math.round((perc/50)*255);
-    }
-    else if(perc < 100) {
+      r = Math.round((1-(perc/100))*255);
+    } else if(perc > -100) {
+      g = Math.round((perc/100)*255);
       r = 255;
-      g = Math.round((1-(perc/100))*255);
     } else {
       r = 255;
       g = 0;
+    }
+    if(perc == 0){
+      g = 255;
+      r = 255;
     }
     var h = r * 0x10000 + g * 0x100 + b * 0x1;
     return color = ('#' + ('000000' + h.toString(16)).slice(-6));
