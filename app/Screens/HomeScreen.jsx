@@ -4,10 +4,14 @@ import { Text, Surface } from 'react-native-paper';
 import { Button } from "react-native-paper";
 import Inputfield from "../components/menu/Inputfield";
 
-export default function HomeScreen({navigation}){
+export default function HomeScreen({navigation, route}){
   const [price, setPrice] = React.useState("");
   const [amountOfCl, setamountOfCl] = React.useState("");
   const [percentageAlcohol, setpercentageAlcohol] = React.useState("");
+  var userId = null;
+  if(route.params?.userId){
+    userId = route.params.userId;
+  }
   var color = 'grey';
 
   function getIndex(){
@@ -41,7 +45,7 @@ export default function HomeScreen({navigation}){
     }
     var h = r * 0x10000 + g * 0x100 + b * 0x1;
     return color = ('#' + ('000000' + h.toString(16)).slice(-6));
-}
+  }
 
   return (
     <View style={{flex: 2}}>
@@ -56,10 +60,25 @@ export default function HomeScreen({navigation}){
           <Text style={{alignSelf:'center', fontSize: 32}} >{getIndex()}</Text>
         </Surface>
       </View>
-      <View style={{flex: 1,alignSelf:'center', alignContent:'center', width: 300}}>
-        <Button style={{alignSelf: 'center'}} mode="contained" onPress={() => navigation.navigate("Login")}>Log In</Button>
-      </View>
+
+      <LoginButton userId={userId} navigation={navigation}></LoginButton>
     </View>
   );
 
+}
+
+function LoginButton(props){
+  if(props.userId === null){
+    return(
+    <View style={{flex: 1,alignSelf:'center', alignContent:'center', width: 300}}>
+      <Button style={{alignSelf: 'center', width: 260}} mode="contained" onPress={() => props.navigation.navigate("Login")}>Log In</Button>
+    </View>
+  )} else {
+    return(
+      <View style={{flex: 1,alignSelf:'center', alignContent:'center', width: 300}}>
+        <Text>{props.userId}</Text>
+        <Button style={{alignSelf: 'center', width: 260}} mode="contained" onPress={() => props.navigation.navigate("Home")}>Log Out</Button>
+      </View>
+    )
+  }
 }
