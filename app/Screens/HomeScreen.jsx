@@ -2,30 +2,18 @@ import React from "react";
 import { View } from "react-native";
 import { Text, Surface } from 'react-native-paper';
 import { Button } from "react-native-paper";
+import { auth } from "../../firebaseConfig";
 import Inputfield from "../components/menu/Inputfield";
+import { useUser } from "../Repo/useUser";
+import { signOut } from "firebase/auth";
+import getIndex from "../Repo/getIndex";
 
 export default function HomeScreen({navigation, route}){
   const [price, setPrice] = React.useState("");
   const [amountOfCl, setamountOfCl] = React.useState("");
   const [percentageAlcohol, setpercentageAlcohol] = React.useState("");
-  var userId = null;
-  if(route.params?.userId){
-    userId = route.params.userId;
-  }
+  const [userId] = useUser();
   var color = 'grey';
-
-  function getIndex(){
-    index = (((price/percentageAlcohol)/amountOfCl)*100.00)
-    if(isNaN(index)){
-      return 0
-    }
-    result = ((50 - (index/1.92)*50)*2).toFixed(0)
-    if(result == -0){
-      return 0;
-    } else {
-      return result;
-    }
-  }
 
   function perc2color(perc) {
     var r, g, b = 0;
@@ -53,11 +41,12 @@ export default function HomeScreen({navigation, route}){
         <Inputfield name = "Prijs" onChangeText={setPrice}/>
         <Inputfield name = "Amount (in cl)" onChangeText={setamountOfCl}/>
         <Inputfield name = "Percentage of alcohol" onChangeText={setpercentageAlcohol} />
+        <Button style={{alignSelf: 'center', width: 260, marginTop: 20}} mode="contained" onPress={() => navigation.navigate("Add", {price: price, amount: amountOfCl, percentage: percentageAlcohol})}>Opslaan</Button>
       </View>
 
       <View style={{flex: 2, justifyContent:'center', alignContent:'center'}}>
-        <Surface style= {{width: 75, height: 75, justifyContent:'center', alignSelf: 'center', borderRadius: 20, backgroundColor: perc2color(getIndex())}}>
-          <Text style={{alignSelf:'center', fontSize: 32}} >{getIndex()}</Text>
+        <Surface style= {{width: 75, height: 75, justifyContent:'center', alignSelf: 'center', borderRadius: 20, backgroundColor: perc2color(getIndex(price,amountOfCl,percentageAlcohol))}}>
+          <Text style={{alignSelf:'center', fontSize: 32}} >{getIndex(price,amountOfCl,percentageAlcohol)}</Text>
         </Surface>
       </View>
 
@@ -68,7 +57,7 @@ export default function HomeScreen({navigation, route}){
 }
 
 function LoginButton(props){
-  if(props.userId === null){
+  if(props.userId == undefined || props.userId == null){
     return(
     <View style={{flex: 1,alignSelf:'center', alignContent:'center', width: 300}}>
       <Button style={{alignSelf: 'center', width: 260}} mode="contained" onPress={() => props.navigation.navigate("Login")}>Log In</Button>
@@ -76,8 +65,8 @@ function LoginButton(props){
   )} else {
     return(
       <View style={{flex: 1,alignSelf:'center', alignContent:'center', width: 300}}>
-        <Text>{props.userId}</Text>
-        <Button style={{alignSelf: 'center', width: 260}} mode="contained" onPress={() => props.navigation.navigate("Home")}>Log Out</Button>
+        <Button style={{alignSelf: 'center', width: 260, marginBottom: 20}} mode="contained" onPress={() => props.navigation.navigate("Saved")}>Bewaarde drankjes</Button>
+        <Button style={{alignSelf: 'center', width: 260}} mode="contained" onPress={() => signOut(auth)}>Log Out</Button>
       </View>
     )
   }

@@ -9,6 +9,7 @@ import React from "react";
 export default function LoginScherm({navigation}){
   const [email, setEmail] = React.useState("");
   const [pass, setPass] = React.useState("");
+  const [error, setError] = React.useState();
 
   const styles = StyleSheet.create({
     container:{
@@ -38,33 +39,51 @@ export default function LoginScherm({navigation}){
   });
 
   function Login(email, password){
+    console.log("im logging in");
     signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      const userId = userCredential.user.uid;
-      console.log(userId);
-      navigation.navigate("Home", {userId: userId});
+      navigation.popToTop();
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
+      setError(errorCode + ": " + errorMessage);
     });
 
 
   }
-  
 
-  return(
-    <View style={styles.container}>
-      <View style={styles.filler}></View>
-      <View style={styles.form}>
-        <TextInput style={styles.formInput} label="Email" value={email} onChangeText={mail => setEmail(mail)} keyboardType="email-address"></TextInput>
-        <TextInput style={styles.formInput} label="Password" value={pass} onChangeText={pass => setPass(pass)} secureTextEntry={true}></TextInput>
-        <Button style={styles.button} mode="contained" onPress={() => Login(email, pass)}>Log In</Button>
+  if(error){
+    return(
+      <View style={styles.container}>
+        <View style={styles.filler}></View>
+        <View style={styles.form}>
+          <TextInput style={styles.formInput} label="Email" value={email} onChangeText={mail => setEmail(mail)} keyboardType="email-address"></TextInput>
+          <TextInput style={styles.formInput} label="Password" value={pass} onChangeText={pass => setPass(pass)} secureTextEntry={true}></TextInput>
+          <Button style={styles.button} mode="contained" onPress={() => Login(email, pass)}>Log In</Button>
 
-        <Text style={styles.registreerText}>Nog geen account?</Text>
-        <Button style={styles.formInput} mode="contained" onPress={() => navigation.navigate("Register")}>Registreer</Button>
+          <Text style={{textAlign:'center'}}>Er ging iets mis. Kijk na of je email en wachtwoord juist zijn.</Text>
+
+          <Text style={styles.registreerText}>Nog geen account?</Text>
+          <Button style={styles.formInput} mode="contained" onPress={() => navigation.navigate("Register")}>Registreer</Button>
+        </View>
+        <View style={styles.filler}></View>
       </View>
-      <View style={styles.filler}></View>
-    </View>
-  );
+    )
+  } else{ 
+    return(
+      <View style={styles.container}>
+        <View style={styles.filler}></View>
+        <View style={styles.form}>
+          <TextInput style={styles.formInput} label="Email" value={email} onChangeText={mail => setEmail(mail)} keyboardType="email-address"></TextInput>
+          <TextInput style={styles.formInput} label="Password" value={pass} onChangeText={pass => setPass(pass)} secureTextEntry={true}></TextInput>
+          <Button style={styles.button} mode="contained" onPress={() => Login(email, pass)}>Log In</Button>
+
+          <Text style={styles.registreerText}>Nog geen account?</Text>
+          <Button style={styles.formInput} mode="contained" onPress={() => navigation.navigate("Register")}>Registreer</Button>
+        </View>
+        <View style={styles.filler}></View>
+      </View>
+    )
+  };
 }
