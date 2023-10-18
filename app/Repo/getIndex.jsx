@@ -3,7 +3,7 @@ export default function getIndex(price, amount, percentage){
   amount = parseFloat(amount);
   percentage = parseFloat(percentage);
 
-  index = (((price/percentage)/amount)*100.00)
+  var index = (((price/percentage)/amount)*100.00)
     if(isNaN(index)){
       return 0
     }

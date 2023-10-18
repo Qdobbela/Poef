@@ -41,7 +41,7 @@ export default function HomeScreen({navigation, route}){
         <Inputfield name = "Prijs" onChangeText={setPrice}/>
         <Inputfield name = "Amount (in cl)" onChangeText={setamountOfCl}/>
         <Inputfield name = "Percentage of alcohol" onChangeText={setpercentageAlcohol} />
-        <Button style={{alignSelf: 'center', width: 260, marginTop: 20}} mode="contained" onPress={() => navigation.navigate("Add", {price: price, amount: amountOfCl, percentage: percentageAlcohol})}>Opslaan</Button>
+        <Button style={{alignSelf: 'center', width: 260, marginTop: 20, display: "none"}} mode="contained" onPress={() => navigation.navigate("Add", {price: price, amount: amountOfCl, percentage: percentageAlcohol})}>Opslaan</Button>
       </View>
 
       <View style={{flex: 2, justifyContent:'center', alignContent:'center'}}>
@@ -59,7 +59,7 @@ export default function HomeScreen({navigation, route}){
 function LoginButton(props){
   if(props.userId == undefined || props.userId == null){
     return(
-    <View style={{flex: 1,alignSelf:'center', alignContent:'center', width: 300}}>
+    <View style={{flex: 1,alignSelf:'center', alignContent:'center', width: 300, display: "none"}}>
       <Button style={{alignSelf: 'center', width: 260}} mode="contained" onPress={() => props.navigation.navigate("Login")}>Log In</Button>
     </View>
   )} else {
